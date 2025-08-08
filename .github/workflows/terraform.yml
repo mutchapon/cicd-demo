@@ -3,7 +3,7 @@ name: Terraform CI/CD Demo (No Cloud)
 on:
   push:
     branches:
-      - main  # หรือเปลี่ยนตามชื่อ branch ที่คุณใช้จริง
+      - cicd-demo
 
 jobs:
   terraform:
