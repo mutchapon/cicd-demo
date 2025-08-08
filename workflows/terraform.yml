@@ -1,0 +1,43 @@
+name: Terraform CI/CD Demo (No Cloud)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v3
+
+    - name: ⚙️ Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.12.2 # หรือเวอร์ชันที่คุณใช้
+
+    - name: ✅ Terraform Format Check
+      run: terraform fmt -check
+
+    - name: 🚀 Terraform Init
+      run: terraform init
+
+    - name: 🧪 Terraform Validate
+      run: terraform validate
+
+    - name: 🧠 Terraform Plan
+      run: terraform plan
+
+    - name: 🔧 Terraform Apply
+      run: terraform apply -auto-approve
+
+    - name: 📄 Show generated file
+      run: cat hello.txt
+
+    - name: 📦 Upload hello.txt as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: hello-txt
+        path: hello.txt
