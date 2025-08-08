@@ -10,6 +10,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # 1. Checkout repository
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v3
+
+    # 2. Set up Google Cloud authentication
+    - name: 🔑 Authenticate with Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'  # ใช้ Secret ที่เก็บไฟล์ JSON
+
+    # 3. ตรวจสอบว่า authentication สำเร็จไหม
+    - name: 🧪 Who am I?
+      run: |
+        gcloud auth list
+
+    # 4. ทดสอบการเข้าถึง GCS ด้วย gsutil
     - name: 📤 Test GCS access with gsutil
-  run: |
-    gsutil ls gs://ci-cd_for_test/
+      run: |
+        gsutil ls gs://ci-cd_for_test/
