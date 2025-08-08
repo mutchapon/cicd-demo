@@ -3,7 +3,7 @@ name: Terraform CI/CD Demo (No Cloud)
 on:
   push:
     branches:
-      - main
+      - cicd-demo
 
 jobs:
   terraform:
