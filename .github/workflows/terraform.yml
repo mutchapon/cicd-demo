@@ -37,7 +37,7 @@ jobs:
       run: cat hello.txt
 
     - name: 📦 Upload hello.txt as artifact
-      uses: uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v4
       with:
         name: hello-txt
         path: hello.txt
