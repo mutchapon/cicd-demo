@@ -3,7 +3,7 @@ name: Terraform CI/CD Demo (No Cloud)
 on:
   push:
     branches:
-      - main
+      - main  # หรือเปลี่ยนตามชื่อ branch ที่คุณใช้จริง
 
 jobs:
   terraform:
@@ -16,7 +16,7 @@ jobs:
     - name: ⚙️ Setup Terraform
       uses: hashicorp/setup-terraform@v2
       with:
-        terraform_version: 1.12.2 # หรือเวอร์ชันที่คุณใช้
+        terraform_version: 1.8.0  # อัปเดตให้ใหม่ขึ้น
 
     - name: ✅ Terraform Format Check
       run: terraform fmt -check
