@@ -18,6 +18,14 @@ jobs:
       with:
         terraform_version: 1.12.2  # อัปเดตให้ใหม่ขึ้น
 
+    - name: 🔑 Authenticate with Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+    - name: 🧪 Who am I?
+      run: gcloud auth list
+
     - name: ✅ Terraform Format Check
       run: terraform fmt -check
 
@@ -35,25 +43,15 @@ jobs:
 
     - name: 📄 Show generated file
       run: cat hello.txt
-      
 
     - name: 📦 Upload hello.txt as artifact
       uses: actions/upload-artifact@v4
       with:
         name: hello-txt
         path: hello.txt
-    - name: 🔑 Authenticate with Google Cloud
-      uses: google-github-actions/auth@v2
-      with:
-        credentials_json: '${{secrets.GCP_CREDENTIALS}}'
-        
-    - name: 🧪 Who am I?
-      run: gcloud auth list
-
 
     - name: 📤 Upload hello.txt to GCS with timestamp
       run: |
         export FILE_NAME="hello-$(date +%s).txt"
         echo "Uploading as $FILE_NAME"
         gsutil cp hello.txt gs://ci-cd_for_test/$FILE_NAME
-
