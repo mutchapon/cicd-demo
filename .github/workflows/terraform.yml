@@ -50,5 +50,5 @@ jobs:
       run: |
         export FILE_NAME="hello-$(date +%s).txt"
         echo "Uploading as $FILE_NAME"
-        gsutil cp hello.txt gs://raw_zone_mongodb/$FILE_NAME
+        gsutil cp hello.txt gs://ci-cd_for_test/$FILE_NAME
 
