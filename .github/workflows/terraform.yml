@@ -41,3 +41,13 @@ jobs:
       with:
         name: hello-txt
         path: hello.txt
+    - name: 🔑 Authenticate with Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+    - name: 📤 Upload hello.txt to GCS with timestamp
+      run: |
+        export FILE_NAME="hello-$(date +%s).txt"
+        echo "Uploading as $FILE_NAME"
+        gsutil cp hello.txt gs://raw_zone_mongodb/$FILE_NAME
