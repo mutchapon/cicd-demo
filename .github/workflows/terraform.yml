@@ -11,8 +11,25 @@ jobs:
 
     steps:
     # 1. Checkout repository
-# - name: 📥 Checkout repository
-#   uses: actions/checkout@v3
+    - name: Setup Google Cloud SDK
+    uses: google-github-actions/setup-gcloud@v1
+    with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+        export_default_credentials: true
+        
+        # # 3. ตรวจสอบว่า authentication สำเร็จไหม
+    - name: 🧪 Who am I?
+    run: |
+        gcloud auth list
+    
+    # 4. ทดสอบการเข้าถึง GCS ด้วย gsutil
+    - name: 📤 Test GCS access with gsutil
+    run: |
+        gsutil ls gs://ci-cd_for_test/
+    
+    - name: 📥 Checkout repository
+    uses: actions/checkout@v3
 
 # # 2. Set up Google Cloud authentication
 # - name: 🔑 Authenticate with Google Cloud
@@ -29,10 +46,3 @@ jobs:
 # - name: 📤 Test GCS access with gsutil
 #   run: |
 #     gsutil ls gs://ci-cd_for_test/
-
-- name: Setup Google Cloud SDK
-  uses: google-github-actions/setup-gcloud@v1
-  with:
-    project_id: ${{ secrets.GCP_PROJECT_ID }}
-    service_account_key: ${{ secrets.GCP_CREDENTIALS }}
-    export_default_credentials: true
