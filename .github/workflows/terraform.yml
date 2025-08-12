@@ -29,3 +29,4 @@ jobs:
     - name: 📤 Test GCS access with gsutil
       run: |
         gsutil ls gs://ci-cd_for_test/
+        
