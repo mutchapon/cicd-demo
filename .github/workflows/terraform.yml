@@ -10,32 +10,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # ✅ 1. Setup Google Cloud SDK
-      - name: Setup Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
-          export_default_credentials: true
+    - uses: actions/checkout@v3
 
-      # ✅ 2. ตรวจสอบว่า authentication สำเร็จไหม
-      - name: 🧪 Who am I?
-        run: |
-          gcloud auth list
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
 
-      # ✅ 3. ทดสอบการเข้าถึง GCS ด้วย gsutil
-      - name: 📤 Test GCS access with gsutil
-        run: |
-          gsutil ls gs://ci-cd_for_test/
+    - name: Authenticate to GCP
+      run: |
+        echo "${{ secrets.GCP_CREDENTIALS }}" > service-account.json
+        export GOOGLE_APPLICATION_CREDENTIALS="service-account.json"
 
-      # ✅ 4. Checkout repository (ควรอยู่บนสุด แต่ไม่ critical)
-      - name: 📥 Checkout repository
-        uses: actions/checkout@v3
+    - name: Test GCS access
+      run: |
+        gsutil ls gs://${{ secrets.GCP_BUCKET_NAME }}
 
-      # ❌ ตัวอย่าง: Comment block นี้ออก (หากไม่ต้องการรัน)
-      # - name: ❌ Example block (disabled)
-      #  
+    - name: Terraform Init
+      run: terraform init \
+        -backend-config="bucket=${{ secrets.GCP_BUCKET_NAME }}" \
+        -backend-config="prefix=terraform/state"
 
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
 
 # # 2. Set up Google Cloud authentication
 # - name: 🔑 Authenticate with Google Cloud
