@@ -19,6 +19,8 @@ jobs:
       run: |
         echo "${{ secrets.GCP_CREDENTIALS }}" > service-account.json
         export GOOGLE_APPLICATION_CREDENTIALS="service-account.json"
+        # ✅ เพิ่มตรงนี้เพื่อให้ gsutil รู้ว่าใช้ project ไหน
+        export CLOUDSDK_CORE_PROJECT="${{ secrets.GCP_PROJECT_ID }}"
 
     - name: Test GCS access
       run: |
